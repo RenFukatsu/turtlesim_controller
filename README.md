@@ -1,5 +1,7 @@
 # turtlesim_controller
 
+[![Build Status](https://travis-ci.com/RenFukatsu/turtlesim_controller.svg?branch=master)](https://travis-ci.com/RenFukatsu/turtlesim_controller)
+
 ## Install
 
 ### Environment
