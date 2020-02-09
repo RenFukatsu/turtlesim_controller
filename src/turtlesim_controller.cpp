@@ -14,7 +14,9 @@ TurtlesimController::TurtlesimController() : private_nh("~")
     // initialize
 
     // print prameter
+    std::cout << "=== turtlesim_controller ===" << std::endl;
     std::cout << "hz: " << hz << std::endl;
+    std::cout << std::endl;
 }
 
 void TurtlesimController::pose_callback(const turtlesim::PoseConstPtr& msg)
@@ -23,18 +25,23 @@ void TurtlesimController::pose_callback(const turtlesim::PoseConstPtr& msg)
     return;
 }
 
+geometry_msgs::Twist TurtlesimController::draw_circle()
+{
+    geometry_msgs::Twist twist;
+    twist.linear.x = 1.0;
+    twist.angular.z = 1.0;
+    return twist;
+}
+
 void TurtlesimController::process()
 {
     ros::Rate loop_rate(hz);
 
-    /* ######### Change Code Here ######### */
     while(ros::ok())
     {
         ros::spinOnce();
 
-        geometry_msgs::Twist twist;
-        twist.linear.x = 1.0;
-        twist.angular.z = 1.0;
+        geometry_msgs::Twist twist = draw_circle();
         cmd_vel_pub.publish(twist);
 
         std::cout << "---publish---" << std::endl;
@@ -43,8 +50,6 @@ void TurtlesimController::process()
 
         loop_rate.sleep();
     }
-    /* #################################### */
-
 }
 
 int main(int argc, char** argv)

@@ -20,20 +20,6 @@ source ~/catkin_ws/devel/setup.bash
 
 ## Run
 
-terminal1
-
-```bash
-roscore
-```
-
-terminal2
-
-```bash
-rosrun turtlesim turtlesim_node
-```
-
-terminal3
-
 ```bash
 roslaunch turtlesim_controller turtlesim_controller
 ```
