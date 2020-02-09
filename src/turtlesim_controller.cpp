@@ -2,16 +2,16 @@
 
 TurtlesimController::TurtlesimController() : private_nh("~")
 {
+    // parameter
+    private_nh.param("hz", hz, {10});
+
+    // initialize
+
     // subscriber
     pose_sub = nh.subscribe("/turtle1/pose", 1, &TurtlesimController::pose_callback, this);
 
     // publisher
     cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 1);
-
-    // parameter
-    private_nh.param("hz", hz, {10});
-
-    // initialize
 
     // print prameter
     std::cout << "=== turtlesim_controller ===" << std::endl;
