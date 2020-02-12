@@ -16,6 +16,7 @@ private:
     // method
     void pose_callback(const turtlesim::PoseConstPtr&);
     geometry_msgs::Twist draw_circle();
+    geometry_msgs::Twist draw_square();
 
     // parameter
     ros::NodeHandle private_nh;

@@ -2,18 +2,15 @@
 
 [![Build Status](https://travis-ci.com/RenFukatsu/turtlesim_controller.svg?branch=master)](https://travis-ci.com/RenFukatsu/turtlesim_controller)
 
-## Install
 
-### Environment
+## Environment
 
 - Ubuntu 18.04
 - ROS Melodic
-  
-### Compoling
+
+## Install
 
 ```bash
-sudo apt install ros-melodic-turtlesim
-sudo apt install ros-melodic-geometry-msgs
 cd ~/catkin_ws/src
 git clone https://github.com/RenFukatsu/turtlesim_controller.git
 catkin build
