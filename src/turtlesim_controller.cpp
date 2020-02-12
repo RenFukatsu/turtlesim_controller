@@ -39,8 +39,6 @@ void TurtlesimController::process()
 
     while(ros::ok())
     {
-        ros::spinOnce();
-
         geometry_msgs::Twist twist = draw_circle();
         cmd_vel_pub.publish(twist);
 
@@ -48,6 +46,7 @@ void TurtlesimController::process()
         std::cout << "linear.x: " << twist.linear.x << std::endl;
         std::cout << "angular.z: " << twist.angular.z << std::endl;
 
+        ros::spinOnce();
         loop_rate.sleep();
     }
 }
