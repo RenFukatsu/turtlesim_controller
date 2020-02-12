@@ -21,6 +21,9 @@ private:
     // parameter
     ros::NodeHandle private_nh;
     double hz;
+    double square_length;
+    double value_x;
+    double value_z;
 
     // member
     ros::NodeHandle nh;
