@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(turtlesim_controller)
 
+SET(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall ${CMAKE_CXX_FLAGS}")
+
 find_package(catkin REQUIRED
   roscpp
   turtlesim
@@ -8,7 +10,7 @@ find_package(catkin REQUIRED
 )
 
 catkin_package(
-  INCLUDE_DIRS include
+#  INCLUDE_DIRS include
 #  LIBRARIES turtlesim_controller
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
