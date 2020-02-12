@@ -7,6 +7,12 @@ TurtlesimController::TurtlesimController() : private_nh("~")
     private_nh.param("square_length", square_length, {5.0});
     private_nh.param("value_x", value_x, {1.0});
     private_nh.param("value_z", value_z, {1.0});
+    private_nh.param("x1", x1, {1.0});
+    private_nh.param("y1", y1, {1.0});
+    private_nh.param("x2", x2, {10.0});
+    private_nh.param("y2", y2, {1.0});
+    private_nh.param("x3", x3, {1.0});
+    private_nh.param("y3", y3, {10.0});
 
     // initialize
 
@@ -22,6 +28,12 @@ TurtlesimController::TurtlesimController() : private_nh("~")
     std::cout << "square_length: " << square_length << std::endl;
     std::cout << "value_x: " << value_x << std::endl;
     std::cout << "value_z: " << value_z << std::endl;
+    std::cout << "x1: " << x1 << std::endl;
+    std::cout << "y1: " << y1 << std::endl;
+    std::cout << "x2: " << x2 << std::endl;
+    std::cout << "y2: " << y2 << std::endl;
+    std::cout << "x3: " << x3 << std::endl;
+    std::cout << "y3: " << y3 << std::endl;
     std::cout << std::endl;
 }
 
@@ -31,21 +43,18 @@ void TurtlesimController::pose_callback(const turtlesim::PoseConstPtr& msg)
     return;
 }
 
+geometry_msgs::Twist TurtlesimController::draw_circle()
+{
+    geometry_msgs::Twist twist;
+    twist.linear.x = 0.0;
+    twist.angular.z = 1.0;
+    return twist;
+}
+
 geometry_msgs::Twist TurtlesimController::draw_square()
 {
     static bool is_vertex = false;
     static turtlesim::Pose record_pose = current_pose;
-    geometry_msgs::Twist twist;
-    if(is_vertex)
-    {
-        twist.linear.x = 0.0;
-        twist.angular.z = value_z;
-    }
-    else
-    {
-        twist.linear.x = value_x;
-        twist.angular.z = 0.0;
-    }
 
     if(current_pose.theta < record_pose.theta)
     {
@@ -73,14 +82,73 @@ geometry_msgs::Twist TurtlesimController::draw_square()
         record_pose.theta -= 2.0 * M_PI;
     }
 
+    geometry_msgs::Twist twist;
+    if(is_vertex)
+    {
+        twist.linear.x = 0.0;
+        twist.angular.z = value_z;
+    }
+    else
+    {
+        twist.linear.x = value_x;
+        twist.angular.z = 0.0;
+    }
+
     return twist;
 }
 
-geometry_msgs::Twist TurtlesimController::draw_circle()
+geometry_msgs::Twist TurtlesimController::draw_triangle()
 {
+    static int point_number = 0;
+    double x, y;
+    switch(point_number)
+    {
+        case 0:
+            x = x1;
+            y = y1;
+            break;
+        case 1:
+            x = x2;
+            y = y2;
+            break;
+        case 2:
+            x = x3;
+            y = y3;
+            break;
+        default:
+            x = 0.0;
+            y = 0.0;
+            break;
+    }
+    std::cout << "target : (" << x << ", " << y << ")" << std::endl;
+    std::cout << "current : (" << current_pose.x << ", " << current_pose.y << ", " << current_pose.theta << ")" << std::endl;
+
     geometry_msgs::Twist twist;
-    twist.linear.x = 0.0;
-    twist.angular.z = 1.0;
+    double theta = atan2(y - current_pose.y, x - current_pose.x);
+    std::cout << "atan2 : " << theta << std::endl;
+    std::cout << "diff theta : " << theta - current_pose.theta << std::endl;
+    if(abs(theta - current_pose.theta) > 1e-2)
+    {
+        twist.linear.x = 0.0;
+        twist.angular.z = value_z;
+    }
+    else
+    {
+        twist.linear.x = value_x;
+        twist.angular.z = 0.0;
+    }
+    if(sqrt(pow(x - current_pose.x, 2) + pow(y - current_pose.y, 2)) < 1e-2)
+    {
+        if(point_number < 2)
+        {
+            point_number++;
+        }
+        else
+        {
+            point_number = 0;
+        }
+    }
+
     return twist;
 }
 
@@ -90,7 +158,7 @@ void TurtlesimController::process()
 
     while(ros::ok())
     {
-        geometry_msgs::Twist twist = draw_square();
+        geometry_msgs::Twist twist = draw_triangle();
         cmd_vel_pub.publish(twist);
 
         // std::cout << "---publish---" << std::endl;
