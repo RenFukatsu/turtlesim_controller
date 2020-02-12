@@ -25,12 +25,13 @@ private:
     double square_length;
     double value_x;
     double value_z;
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    double x3;
-    double y3;
+    double triangle_x1;
+    double triangle_y1;
+    double triangle_x2;
+    double triangle_y2;
+    double triangle_x3;
+    double triangle_y3;
+    std::string mode;
 
     // member
     ros::NodeHandle nh;

@@ -7,12 +7,13 @@ TurtlesimController::TurtlesimController() : private_nh("~")
     private_nh.param("square_length", square_length, {5.0});
     private_nh.param("value_x", value_x, {1.0});
     private_nh.param("value_z", value_z, {1.0});
-    private_nh.param("x1", x1, {1.0});
-    private_nh.param("y1", y1, {1.0});
-    private_nh.param("x2", x2, {10.0});
-    private_nh.param("y2", y2, {1.0});
-    private_nh.param("x3", x3, {1.0});
-    private_nh.param("y3", y3, {10.0});
+    private_nh.param("triangle_x1", triangle_x1, {1.0});
+    private_nh.param("triangle_y1", triangle_y1, {1.0});
+    private_nh.param("triangle_x2", triangle_x2, {10.0});
+    private_nh.param("triangle_y2", triangle_y2, {1.0});
+    private_nh.param("triangle_x3", triangle_x3, {1.0});
+    private_nh.param("triangle_y3", triangle_y3, {10.0});
+    private_nh.param("mode", mode, {"circle"});
 
     // initialize
 
@@ -28,12 +29,12 @@ TurtlesimController::TurtlesimController() : private_nh("~")
     std::cout << "square_length: " << square_length << std::endl;
     std::cout << "value_x: " << value_x << std::endl;
     std::cout << "value_z: " << value_z << std::endl;
-    std::cout << "x1: " << x1 << std::endl;
-    std::cout << "y1: " << y1 << std::endl;
-    std::cout << "x2: " << x2 << std::endl;
-    std::cout << "y2: " << y2 << std::endl;
-    std::cout << "x3: " << x3 << std::endl;
-    std::cout << "y3: " << y3 << std::endl;
+    std::cout << "triangle_x1: " << triangle_x1 << std::endl;
+    std::cout << "triangle_y1: " << triangle_y1 << std::endl;
+    std::cout << "triangle_x2: " << triangle_x2 << std::endl;
+    std::cout << "triangle_y2: " << triangle_y2 << std::endl;
+    std::cout << "triangle_x3: " << triangle_x3 << std::endl;
+    std::cout << "triangle_y3: " << triangle_y3 << std::endl;
     std::cout << std::endl;
 }
 
@@ -104,16 +105,16 @@ geometry_msgs::Twist TurtlesimController::draw_triangle()
     switch(point_number)
     {
         case 0:
-            x = x1;
-            y = y1;
+            x = triangle_x1;
+            y = triangle_y1;
             break;
         case 1:
-            x = x2;
-            y = y2;
+            x = triangle_x2;
+            y = triangle_y2;
             break;
         case 2:
-            x = x3;
-            y = y3;
+            x = triangle_x3;
+            y = triangle_y3;
             break;
         default:
             x = 0.0;
@@ -158,7 +159,24 @@ void TurtlesimController::process()
 
     while(ros::ok())
     {
-        geometry_msgs::Twist twist = draw_triangle();
+        geometry_msgs::Twist twist;
+        if(mode == "circle")
+        {
+            twist = draw_circle();
+        }
+        else if(mode == "square")
+        {
+            twist = draw_square();
+        }
+        else if(mode == "triangle")
+        {
+            twist = draw_triangle();
+        }
+        else
+        {
+            std::cout << "invalid mode" << std::endl;
+        }
+
         cmd_vel_pub.publish(twist);
 
         // std::cout << "---publish---" << std::endl;
